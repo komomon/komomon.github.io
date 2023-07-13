@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Get HTML</title>
+</head>
+<body>
+  <form id="urlForm">
+    <label for="urlInput">URL:</label>
+    <input type="text" id="urlInput" required>
+    <button type="submit">Get HTML</button>
+  </form>
+
+  <div id="result"></div>
+
+  <script>
+    document.getElementById("urlForm").addEventListener("submit", async function(event) {
+      event.preventDefault();
+
+      const urlInput = document.getElementById("urlInput");
+      const url = urlInput.value;
+
+      try {
+        const html = await getHTML(url);
+        document.getElementById("result").innerText = html;
+      } catch (error) {
+        console.error(error);
+        document.getElementById("result").innerText = "Error occurred while fetching HTML.";
+      }
+    });
+
+    async function getHTML(url) {
+      const headers = {
+        // 'Host': 'www.liangtengyu.com:9998',
+        // 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36'
+      };
+      const encodedURL = encodeURIComponent(url);
+      const requestURL = `https://www.helloworld.net/getUrlHtml?url=${encodedURL}`;
+
+      try {
+        const response = await fetch(requestURL, { method: 'GET', headers });
+        const data = await response.json();
+        console.log(data.html)
+        return data.html;
+      } catch (error) {
+        console.error(error);
+        throw new Error("Error occurred while fetching HTML.");
+      }
+    }
+  </script>
+</body>
+</html>
